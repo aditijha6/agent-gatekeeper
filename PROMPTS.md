@@ -4,35 +4,70 @@
 **Date:** 20 November 2026
 **Student:** enrolment number PGD202571184
 
-> DRAFT: please review. Everything in Part A is what was actually sent. Part C must be written by you.
+> DRAFT: please review. Part A is what was actually sent. Part B is what the AI did. Part C is **only** for checks you really did yourself; leave a box empty if you haven't done it.
 
 ## Part A: Instructions I gave (in order)
 
 1. "I'll be posting a prompt and a screenshot, which is basically an assignment my college has given me. So understand it and help me out. Do it for me."
 2. Attached: my working protocol ("Part 14: Strict manual action, human involvement and approval protocol"). It tells the AI to label tasks as CLAUDE CAN DO / MY APPROVAL REQUIRED / ONLY I CAN DO, and to stop at manual checkpoints.
 3. Attached: two screenshots of the assignment brief "Agentic AI Project: Agent Gatekeeper for a Real Company".
-4. "My roll number doesn't end in 9 … It's PGD 2025 71184. It ends with 4." (This corrected the AI, which had first used an old roll number.)
+4. "My roll number doesn't end in 9 … It's PGD 2025 71184. It ends with 4." Enrolment number: PGD202571184. (This corrected the AI, which had first used an old roll number.)
 5. Chose the company: "JP morgan"
 6. "I don't know anything about this project … you have to do everything for me. You just need to ask me things where manual permissions are required, and other than that, do the project for me."
 7. "Can you run all the 6 tests … can you just run the 6 tests yourself?"
 8. "Can you push it into my github?" I created the empty repository `agent-gatekeeper` myself and signed in to GitHub myself in the Claude app's browser.
+9. "Check it out and see if it runs actually, or if there are any errors, I want you to fix them."
+10. A long improvement prompt, summarised here: "Thoroughly review, correct, improve, and complete my existing project … do not rebuild it from scratch." It asked for:
+    - correct, sourced company facts, with the $500 and $2,000 limits treated as demo values
+    - a complete ASK CUSTOMER approve/reject workflow (PENDING → APPROVED or REJECTED)
+    - stronger security rules (permissions, customer ownership, no bypassing approval)
+    - a better audit log (request IDs, statuses, decision times)
+    - a professional dashboard and safe database changes
+    - the original 14 tests kept, with tests added for 16 listed cases
+    - updated documentation, Windows instructions and an honest report of actual test results
 
 ## Part B: What the AI did with these instructions
 
+**First version**
 - Worked out the company type from the last digit (4 → bank).
 - Researched real banks (JPMorgan Chase, Wells Fargo, HDFC Bank) and recommended options. I chose JPMorgan Chase.
-- Drafted 8 rules and the $500 limit, based on JPMorgan's reported policy (blocks outside agents but allows read-only data through providers like Plaid) and Chase's typical Zelle limit. The AI picked "all transfers ask the customer" after I asked it to make the decisions.
-- Wrote the code (`gatekeeper.py`, `storage.py`, `app.py`, `config.py`), 14 automated tests, `README.md`, `RULES.md` and `TEST_CASES.md`.
-- Ran the tests and the web app in its own workspace (14/14 passed) and fixed one display issue (revoked agents now show "REVOKED").
-- Ran the six test cases through the web app at my request and recorded the results in TEST_CASES.md as "Run 1: by Claude".
-- Uploaded the project files to my GitHub repository through the Claude app's browser, after I signed in. The first commit says it was generated with Claude.
+- Drafted 8 rules and the $500 limit. It picked "all transfers ask the customer" after I asked it to make the decisions.
+- Wrote `gatekeeper.py`, `storage.py`, `app.py`, `config.py`, 14 automated tests and the documents.
+- Ran the six test cases through the web app and recorded them as Claude's run.
+- Uploaded the project to my GitHub repository through the Claude app's browser, after I signed in.
+- Checked a fresh copy from GitHub and fixed a crash that happened when port 8000 was busy.
+- Added `run_app.bat` and `run_tests.bat` for Windows.
+
+**Improved version (prompt 10)**
+- **Approval workflow:**
+  - ASK CUSTOMER now creates a PENDING transaction.
+  - Only the owning customer, with their PIN, can approve (APPROVED) or reject (REJECTED), and only once.
+  - Refused attempts are logged.
+  - The daily cap and the agent's status are checked again at approval.
+  - Revoking an agent rejects its pending transactions.
+- **Security:** customer ownership is checked, agents have per-action permissions (rule 3), and only ALLOWED and APPROVED payments count as completed money.
+- **Storage:**
+  - New `customers` (hashed PINs) and `transactions` tables.
+  - The audit log has request IDs, agent IDs, statuses, customer decisions and decision times, and it is append-only.
+  - Old databases are upgraded without deleting anything.
+  - Reset needs the word `RESET` typed in.
+- **Dashboard:** overview tiles, simulator, pending approvals, registration, permissions, revocation, agents, transaction history, audit log, rules, and two CSV exports. It is labelled as an academic prototype.
+- **Facts:**
+  - RULES.md now separates reported facts (with sources: PYMNTS, The Paypers, Cybernews, Wells Fargo, American Banker) from rules designed for this prototype.
+  - The limits are now clearly demo values, set in `config.py`.
+- **Tests:**
+  - The original 14 tests were kept unchanged, and 25 new tests were added, including an end-to-end website test.
+  - Result in Claude's Linux workspace: **39 run, 39 passed, 0 failed** on Python 3.11, 3.12 and 3.13.
+  - Claude also broke the code on purpose three times to check that the tests fail, and they did.
 
 ## Part C: My own checks and modifications (written by me)
 
 <!-- Fill this in yourself after you do each item. Do not write anything you did not actually do. -->
 
-- [ ] Ran the app on my own computer (date, OS, Python version):
-- [ ] Ran the six test cases myself. My actual results are in TEST_CASES.md.
+- [ ] Ran `run_tests.bat` on my own laptop (date, Windows version, Python version, result):
+- [ ] Ran the app and the manual test cases in TEST_CASES.md myself, and filled in "Your actual result":
+- [ ] Took my own screenshots (list them):
 - [ ] My own code change (what I changed, which file, how I tested it):
 - [ ] Rules I reviewed or changed, and why:
+- [ ] Recorded the demo video in my own voice:
 - [ ] Anything I found that did not work, and what I did:
