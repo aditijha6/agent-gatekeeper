@@ -245,8 +245,20 @@ def main():
     args = parser.parse_args()
 
     STORE = Store(args.db)
-    url = f"http://127.0.0.1:{args.port}"
-    server = HTTPServer(("127.0.0.1", args.port), Handler)
+
+    # If the port is busy (e.g. the app is already running), try the next ones.
+    server = None
+    for port in range(args.port, args.port + 10):
+        try:
+            server = HTTPServer(("127.0.0.1", port), Handler)
+            break
+        except OSError:
+            print(f"Port {port} is busy, trying {port + 1}...")
+    if server is None:
+        print("No free port found. Close other copies of the app and try again.")
+        return
+
+    url = f"http://127.0.0.1:{port}"
     print(f"{config.PROJECT_TITLE} for {config.COMPANY} is running at {url}")
     print("Press Ctrl+C to stop.")
     if not args.no_browser:
