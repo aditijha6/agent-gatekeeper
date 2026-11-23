@@ -34,11 +34,12 @@ STATUS_FOR_DECISION = {ALLOW: ALLOWED, ASK: PENDING, BLOCK: BLOCKED}
 COMPLETED_STATUSES = {ALLOWED, APPROVED}
 
 # Bank actions the gatekeeper understands
-READ_ONLY_ACTIONS = {"view_balance"}
+READ_ONLY_ACTIONS = "view_balance": "View balance"
 MONEY_ACTIONS = {"pay_bill", "transfer_money"}
 ALL_ACTIONS = READ_ONLY_ACTIONS | MONEY_ACTIONS
 ACTION_LABELS = {
     "view_balance": "View balance",
+     "view_transactions": "View transactions",
     "pay_bill": "Pay a bill",
     "transfer_money": "Transfer money",
 }
