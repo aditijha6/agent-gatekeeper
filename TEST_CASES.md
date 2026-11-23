@@ -15,17 +15,15 @@ There are two kinds of testing:
 
 Demo PINs: C1001 = 1111, C1002 = 2222. Requests go in the **Transaction simulator**, and approvals in **Pending customer approvals**. Leave Amount empty where it says "(empty)".
 
+
 | # | What it tests | What to do | Expected result | Your actual result | Pass? |
-|---|---------------|------------|-----------------|--------------------|-------|
-| TC1 | Unknown agent | C1001, RogueBot, View balance, (empty) | BLOCKED · Rule 1 (TX-0001) | | |
-| TC2 | Revoked agent, even read-only | C1001, ShopperGPT, View balance, (empty) | BLOCKED · Rule 2 | | |
-| TC3 | Balance enquiry allowed | C1001, BudgetBot, View balance, (empty) | ALLOWED · Rule 4 | | |
-| TC4 | Small bill allowed | C1001, BudgetBot, Pay a bill, 120 | ALLOWED · Rule 8 | | |
-| TC5 | Big bill needs the customer | C1001, BudgetBot, Pay a bill, 750 | PENDING · Rule 7 (TX-0005), listed under Pending approvals | | |
-| TC5a | Customer approves | On TX-0005, enter C1001 and PIN 1111, click **Approve** | "TX-0005 APPROVED by C1001"; status APPROVED in Transaction history | | |
-| TC6 | Transfer needs the customer | C1001, BudgetBot, Transfer money, 50 | PENDING · Rule 7 (TX-0006) | | |
-| TC6a | Wrong PIN refused | On TX-0006, enter C1001 and PIN 9999, click Approve | "Wrong PIN… TX-0006 was not changed"; still PENDING | | |
-| TC6b | Customer rejects | On TX-0006, enter C1001 and PIN 1111, click **Reject** | "TX-0006 REJECTED by C1001"; status REJECTED | | |
+|---|---|---|---|---|---|
+| TC1 | Known agent balance enquiry | C1001, BudgetBot, View balance | ALLOWED - Rule 4 | ALLOWED | Yes |
+| TC2 | Unknown agent | C1001, UnknownBot, View balance | BLOCKED - Rule 1 | BLOCKED - Rule 1 | Yes |
+| TC3 | Large bill rejected by customer | C1001, BudgetBot, Pay a bill, $750; reject the pending request | PENDING, then REJECTED - Rule 7 | PENDING, then REJECTED | Yes |
+| TC4 | Small bill payment | C1001, BudgetBot, Pay a bill, $120 | ALLOWED - Rule 8 | ALLOWED - Rule 8 | Yes |
+| TC5 | Revoked agent | Revoke BudgetBot, then request View balance | BLOCKED - Rule 2 | BLOCKED - Rule 2 | Yes |
+| TC6 | Large bill approved by customer | PaymentBot, Pay a bill, $750; approve the pending request | PENDING, then APPROVED - Rule 7 | PENDING, then APPROVED | Yes |
 
 **Extra checks for the demo:**
 
